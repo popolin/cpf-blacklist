@@ -1,0 +1,37 @@
+
+<%= content_tag :div, id: 'cpf-form', class: 'columns', data: {  } do %>
+
+  <span v-if="data.error != null || data.message != null">
+    <div v-bind:class="{'alert-danger': data.isError, 'alert-info': !data.isError} " class="alert mt-3" role="alert">
+      {{ data.error }}{{ data.message }}
+    </div>
+  </span>
+  
+  <div class='card checkcpf-card'>
+    <div id="form" class="form">
+      <div class="card-content">
+        <h2 class="title">Consultar CPF</h2>
+ 
+        <label>CPF</label>
+        <input name='cpf' type='text' v-mask="'###.###.###-##'" v-model="data.cpf" class="input">
+        <br />
+        <div class="card-footer">
+          <button name='consultar' @click="findCPF(data.cpf, $event)" class="button is-link checkcpf-action">Consultar</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="result" class="card checkcpf-card" v-if="data.situacao != null">
+    <strong>Resultado da pesquisa</strong>
+    <h4>
+      <small>CPF: </small>{{ data.cpf_buscado | VMask('###.###.###-##') }}
+    </h4>
+    <h4>
+      <small>Situação: </small>
+      <span v-bind:class="{'text-danger': data.block_id != null, 'text-info': data.block_id == null} ">{{ data.situacao }}</span>
+    </h4>
+    <button v-if="data.block_id == null" @click="blockCPF(data.numeric_cpf, $event)" class="button is-link checkcpf-action">Incluir na black list</button>
+    <button v-if="data.block_id != null" @click="freeCPF(data.block_id, $event)" class="button is-link checkcpf-action">Liberar CPF</button>
+  </div>
+ 
+<% end %>
